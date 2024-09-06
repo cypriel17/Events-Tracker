@@ -1,6 +1,6 @@
 {
   "cesVersion": "2.11.24",
-  "projectName": "MeetUpClone",
+  "projectName": "Meetup",
   "packages": [
     {
       "name": "expo-router",
@@ -31,9 +31,9 @@
     "version": "10.8.3"
   },
   "os": {
-    "type": "Linux",
-    "platform": "linux",
-    "arch": "x64",
-    "kernelVersion": "6.9.3-76060903-generic"
+    "type": "Darwin",
+    "platform": "darwin",
+    "arch": "arm64",
+    "kernelVersion": "24.0.0"
   }
 }
