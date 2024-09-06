@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Meetup",
-    "slug": "Meetup",
+    "name": "Meetupclone",
+    "slug": "Meetupclone",
     "version": "1.0.0",
 
-    "scheme": "Meetup",
+    "scheme": ["meetupclone"],
     "web": {
       "bundler": "metro",
       "output": "static",
