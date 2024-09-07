@@ -32,10 +32,10 @@ const router = useRouter();
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="Profile"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </Tabs>
