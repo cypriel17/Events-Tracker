@@ -23,7 +23,7 @@ export default function CreateEvent(){
             { 
                 title, 
                 description,
-                date,
+                date: date.toISOString(),
                 user_id: user?.id,
             },
         ])
@@ -40,8 +40,7 @@ export default function CreateEvent(){
             setLoading(false);
             router.push(`/event/${data?.id}`)
         }
-        
-                
+             
     };
 
     return (

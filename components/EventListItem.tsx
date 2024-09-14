@@ -4,15 +4,16 @@ import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 import { supabase } from '~/utils/supabase';
+import { Event } from '~/types/db';
 
-export interface Event {
-  id: number;
-  title: string;
-  date: string; 
-  image_uri: string;
-  description: string;
-  location: string;
-}
+// export interface Event {
+//   id: number;
+//   title: string;
+//   date: string; 
+//   image_uri: string;
+//   description: string;
+//   location: string;
+// }
 
 export default function EventListItem({ event }: { event: Event }) {
 

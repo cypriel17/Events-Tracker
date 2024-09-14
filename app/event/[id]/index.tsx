@@ -3,15 +3,14 @@ import { useLocalSearchParams, Stack, Link } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, View, Image, Pressable, ActivityIndicator } from 'react-native';
 import { supabase } from '~/utils/supabase';
-import { Event } from '../../../components/EventListItem'
+import { Attendance, Event } from '~/types/db';
 import { useAuth } from '~/contexts/AuthProvider';
-import { Session } from '@supabase/supabase-js';
 
 export default function EventPage() {
   const { id } = useLocalSearchParams();
 
   const [event, setEvent] = useState<Event | null>(null);
-  const [attendance, setAttendance] = useState(null);
+  const [attendance, setAttendance] = useState<Attendance | null>(null);
   const [loading, setLoading] = useState(false);
 
   const { user } = useAuth();
@@ -19,24 +18,32 @@ export default function EventPage() {
   const fetchEvent = async () => {
     setLoading(true);
     const { data, error } = await supabase.from('events').select('*').eq('id', id).single();
-    const { data: attendanceData, error: err } = await supabase.from('attendance').select('*').eq('user_id', user?.id).eq('event_id', id).single();
+    setEvent(data);
 
-    if (data) {
-      setEvent(data);
-    }
+    const { data: attendanceData } = await supabase
+      .from('attendance')
+      .select('*')
+      .eq('user_id', user!.id)
+      .eq('event_id', id)
+      .single();
     setAttendance(attendanceData);
+
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
     fetchEvent();
   }, [id]);
 
-  const joinEvents = async () => {
-    // Add event to user's attending events
-    const { data, error } = await supabase.from('attendance').insert({ user_id: user?.id , event_id: event?.id }).select().single();
+  const joinEvent = async () => {
+    const { data, error } = await supabase
+      .from('attendance')
+      .insert({ user_id: user!.id, event_id: event!.id })
+      .select()
+      .single();
+
     setAttendance(data);
-  }
+  };
 
   if (loading){
     return <ActivityIndicator />;
@@ -76,7 +83,7 @@ export default function EventPage() {
         { attendance ? (
           <Text className='font-bold text-green-500'>You Are Attending!</Text>
         ) : (
-            <Pressable onPress={() => joinEvents()} className="rounded-md bg-red-500 p-5 px-8">
+            <Pressable onPress={() => joinEvent()} className="rounded-md bg-red-500 p-5 px-8">
               <Text className="text-lg font-bold text-white">Join and RSVP</Text>
             </Pressable>)}
       </View>

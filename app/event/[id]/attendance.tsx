@@ -1,37 +1,33 @@
-import { useLocalSearchParams } from "expo-router";
-import { useState, useEffect } from "react";
-import { FlatList, Text, View } from "react-native";
-import { supabase } from "~/utils/supabase";
+import { useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
 
-export default function EventAttendance(){
+import { supabase } from '~/utils/supabase';
 
-    const { id } = useLocalSearchParams();
+export default function EventAttendance() {
+  const { id } = useLocalSearchParams();
+  const [attendees, setAttendees] = useState([]);
 
-    const [attendees, setAttendees] = useState([]);
+  useEffect(() => {
+    fetchAttendees();
+  }, [id]);
 
-    useEffect(() => {
-        getAttendees();
-    }, [id])
+  const fetchAttendees = async () => {
+    const { data } = await supabase.from('attendance').select('*, profiles(*)').eq('event_id', id);
 
-    const getAttendees = async () => {
-        const { data, error } = await supabase
-                                    .from('attendance')
-                                    .select('*, profiles(*)')
-                                    .eq('event_id', id);
+    setAttendees(data);
+  };
 
-        if (data){
-            setAttendees(data);
-        }
-    }
-
-    return (
-            <FlatList
-                data={attendees}
-                    renderItem={({ item }) => (
-                        <View className='p-2'>
-                            <Text className='font-bold'>{item.profiles.full_name || 'User'}</Text>
-                        </View>
-                    )}
-            />
-    );
+  return (
+    <>
+      <FlatList
+        data={attendees}
+        renderItem={({ item }) => (
+          <View className="p-3">
+            <Text className="font-bold">{item.profiles.full_name || 'User'}</Text>
+          </View>
+        )}
+      />
+    </>
+  );
 }
