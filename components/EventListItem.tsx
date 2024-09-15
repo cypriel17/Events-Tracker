@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, Image, Pressable } from 'react-native';
 import { supabase } from '~/utils/supabase';
 import { Event } from '~/types/db';
+import SupaImage from './SupaImage';
 
 // export interface Event {
 //   id: number;
@@ -50,8 +51,8 @@ const getAttendees = async () => {
             <Text className="text-gray-700">{event.location}</Text>
           </View>
 
-          {/* Event image */}
-          <Image source={{ uri: event.image_uri }} className="aspect-video w-2/5 rounded-xl" />
+          {/* Event image and making a condition {} that if theres no image render nothing */}
+          {event.image_uri && <SupaImage path={event.image_uri} className="aspect-video w-2/5 rounded-xl" />}
         </View>
 
         {/* Footer */}

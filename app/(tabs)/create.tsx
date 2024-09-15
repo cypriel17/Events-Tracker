@@ -4,6 +4,7 @@ import DatePicker from 'react-native-date-picker';
 import { supabase } from '~/utils/supabase';
 import { useAuth } from '~/contexts/AuthProvider';
 import { router } from 'expo-router';
+import Avatar from '~/components/Avatar';
 
 export default function CreateEvent(){
     const [date, setDate] = useState(new Date());
@@ -14,6 +15,7 @@ export default function CreateEvent(){
     const [loading, setLoading] = useState(false);
     const [title, setTitle] = useState('title');
     const [description, setDescription] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
 
     const createEvent = async () => {
         setLoading(true);
@@ -25,6 +27,7 @@ export default function CreateEvent(){
                 description,
                 date: date.toISOString(),
                 user_id: user?.id,
+                image_uri: imageUrl,
             },
         ])
         .select()
@@ -45,6 +48,15 @@ export default function CreateEvent(){
 
     return (
         <View className='flex-1 bg-white p-5 gap-3'>
+            <View className="items-center ">
+                <Avatar
+                size={200}
+                url={imageUrl}
+                onUpload={(url: string) => {
+                    setImageUrl(url);
+                }}
+                />
+            </View>
             <TextInput 
                 value={title}
                 // onChangeText={(text) => setTitle(text)}

@@ -5,6 +5,7 @@ import { Text, View, Image, Pressable, ActivityIndicator } from 'react-native';
 import { supabase } from '~/utils/supabase';
 import { Attendance, Event } from '~/types/db';
 import { useAuth } from '~/contexts/AuthProvider';
+import SupaImage from '~/components/SupaImage';
 
 export default function EventPage() {
   const { id } = useLocalSearchParams();
@@ -59,7 +60,8 @@ export default function EventPage() {
         options={{ title: 'Event', headerBackTitleVisible: false, headerTintColor: 'black' }}
       />
 
-      <Image source={{ uri: event.image_uri }} className="aspect-video w-full rounded-xl" />
+      {/* <Image source={{ uri: event.image_uri }} className="aspect-video w-full rounded-xl" /> */}
+      <SupaImage path={event.image_uri} className="aspect-video w-full rounded-xl" />
 
       <Text className="text-3xl font-bold" numberOfLines={2}>
         {event.title}
