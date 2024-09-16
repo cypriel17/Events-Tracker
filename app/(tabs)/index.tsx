@@ -1,29 +1,60 @@
 import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 import EventListItem from '~/components/EventListItem';
 import { supabase } from '~/utils/supabase';
 import { Event, NearbyEvent } from '~/types/db';
+import * as Location from 'expo-location';
 
 export default function Events() {
   const [events, setEvents] = useState<NearbyEvent[]>([]);
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+
+  const [status, requestPermission] = Location.useForegroundPermissions();
 
   useEffect(() => {
-    fetchNearbyEvents();
+    if (status && !status.granted && status.canAskAgain){
+      requestPermission();
+    }
+  }, [status])
+
+  useEffect(() => {
+    (async () => {
+      
+      // let { status } = await Location.requestForegroundPermissionsAsync();
+      if (!status?.granted) {
+        // await requestPermission();
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
   }, []);
 
-  const fetchAllEvents = async () => {
-    const { data, error } = await supabase.from('events').select('*');
-
-    if (data) {
-      setEvents(data ?? []);   
+  useEffect(() => {
+    if (location){
+      fetchNearbyEvents();
     }
-  }
+  }, [location]);
+
+  // const fetchAllEvents = async () => {
+  //   const { data, error } = await supabase.from('events').select('*');
+
+  //   if (data) {
+  //     setEvents(data ?? []);   
+  //   }
+  // }
 
   const fetchNearbyEvents = async () => {
+
+    if (!location){
+      return;
+    }
+
     const { data, error } = await supabase.rpc('nearby_events', {
-      lat: -26.331215962196655, 
-      long: 28.204989361319793,
+      lat: location?.coords.latitude, 
+      long: location?.coords.longitude,
     });
   }
   
