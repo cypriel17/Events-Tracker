@@ -27,21 +27,20 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-        }}
-      />
-
-      <Tabs.Screen
         name="create"
         options={{
           title: 'New event',
           tabBarIcon: ({ color }) => <TabBarIcon name="plus" color={color} />,
         }}
       />
-    </Tabs>
 
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+        }}
+      />
+    </Tabs>
   );
 }
